@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-// import { signin } from "../../actions/auth";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../actions/authActions";
+import { redirect } from "react-router-dom";
 import {
   MDBBtn,
   MDBContainer,
@@ -13,67 +15,46 @@ import {
 } from "mdb-react-ui-kit";
 
 const SignIn = () => {
-  const [view, setView] = useState("password");
-  const [values, setValues] = useState({
+
+  const [data, setData] = useState({
     email: "",
     password: "",
-    error: "",
-    message: "",
-    showForm: true,
   });
 
-  const { email, password, error, message, showForm } = values;
+  const dispatch = useDispatch();
+  const { user, message ,success } = useSelector((state) => state.User);
+  const { email, password } = data;
+
+  if(success){
+    return  <h1 className="alert alert-success mt-5">Log In Success !</h1>
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setValues({ ...values, loading: true, error: false });
+    setData({ ...data, loading: true });
     const user = { email, password };
-
-    // signin(user).then((data) => {
-    //   if (data.error) {
-    //     setValues({ ...values, error: data.error });
-    //   } else {
-    //     setValues({
-    //       ...values,
-    //       email: "",
-    //       password: "",
-    //       error: "",
-    //       message: data.message,
-    //       showForm: false,
-    //     });
-    //   }
-    // });
+    dispatch(loginUser(user));
   };
   const handleInput = (e) => {
-    const userData = { ...values };
-    userData[e.target.id] = e.target.value;
-    setValues(userData);
+    const newData = { ...data };
+    newData[e.target.id] = e.target.value;
+    setData(newData);
   };
 
-  const showError = () =>
-    error ? (
+  const showMessage = () =>
+    user.message ? (
       <>
-        <div className="alert alert-danger mt-5">{error}</div>
+        <div className="alert alert-danger mt-5">{user.message}</div>
         <a href="signup">Click here to go back</a>
       </>
     ) : (
       ""
     );
-  const showMessage = () =>
-    message ? <div className="alert alert-info">{message}</div> : "";
-
-  const handleView = () => {
-    if (view === "password") {
-      setView("text");
-    } else {
-      setView("password");
-    }
-  };
 
   const signinForm = () => {
     return (
       <>
-        <form onSubmit={(e) => handleSubmit(e)} className="pt-5">
+        <form onSubmit={(e) => handleSubmit(e)}>
           <MDBContainer fluid>
             <MDBCard
               className="text-black m-5"
@@ -94,10 +75,11 @@ const SignIn = () => {
                       <MDBIcon fas icon="envelope me-3" size="lg" />
                       <MDBInput
                         onChange={(e) => handleInput(e)}
-                        value={values.email}
+                        value={data.email}
                         label="Your Email"
                         id="email"
                         type="email"
+                        autoComplete="false"
                       />
                     </div>
 
@@ -105,14 +87,12 @@ const SignIn = () => {
                       <MDBIcon fas icon="lock me-3" size="lg" />
                       <MDBInput
                         onChange={(e) => handleInput(e)}
-                        value={values.password}
+                        value={data.name}
                         label="Password"
                         id="password"
-                        type={view}
+                        type="password"
+                        autoComplete="false"
                       />
-                      {/* <button onClick={handleView}>
-                        {view ? "View" : "Hide"}
-                      </button> */}
                     </div>
 
                     <MDBBtn className="mb-4" size="lg" type="submit">
@@ -141,12 +121,9 @@ const SignIn = () => {
   return (
     <React.Fragment>
       <div className="container-fluid pb-3 item-center">
-        <div className="col-md-6 m-auto">
-          {showError()}
-          {showMessage()}
-        </div>
+        <div className="col-md-6 m-auto">{showMessage()}</div>
       </div>
-      {showForm && signinForm()}
+      {!user.message && signinForm()}
     </React.Fragment>
   );
 };

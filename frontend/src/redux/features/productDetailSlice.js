@@ -7,6 +7,7 @@ const initialState ={}
 const getProductDetails = createSlice({
     name:'product',
     initialState,
+
     extraReducers:(builder)=>{
         builder.addCase(fetchProductDetails.pending,(state)=>{
             state.loading = true

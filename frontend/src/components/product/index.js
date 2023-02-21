@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import Loading from "../Loading";
+import Loading from "../layout/Loading";
 import "./product.css";
 import { Container, Row } from "react-bootstrap";
 

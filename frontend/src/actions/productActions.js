@@ -2,8 +2,9 @@ import axios from "axios"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
 // Getting all products 
-export const fetchProudcts = createAsyncThunk('products/fetchProducts',(keyword='',activePage=1)=>{
-    return axios.get(`http://localhost:5000/products?keyword=${keyword}&page=${activePage}`).then((response)=>response.data)
+export const fetchProudcts = createAsyncThunk('products/fetchProducts',async (keyword , activePage=2)=>{
+    const response = await axios.get(`http://localhost:5000/products?keyword=${keyword}&page=${activePage}`)
+    return response.data
 })
 
 

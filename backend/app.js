@@ -1,27 +1,28 @@
 const experss = require("express");
 const products = require("./routes/productRoutes");
 const auth = require("./routes/authRoutes");
-const cors = require('cors')
+const cors = require("cors");
 
-const cookieParser = require('cookie-parser')
+const cookieParser = require("cookie-parser");
 
-
-const errorMiddleware = require('./middlewares/errorMiddleware')
+const errorMiddleware = require("./middlewares/errorMiddleware");
 
 const app = experss();
 app.use(experss.json());
-app.use(cookieParser())
+app.use(cookieParser());
 
-app.use(cors('origin','*'))
-// Routes 
+app.use(cors("origin", "*"));
+
+
+
+
+// Routes
 app.use("/", products);
-app.use('/',auth)
-
-
+app.use("/", auth);
 
 
 
 // Middle wares
-app.use(errorMiddleware)
+app.use(errorMiddleware);
 
 module.exports = app;

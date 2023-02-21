@@ -5,11 +5,18 @@ const initialState = {
   loading: false,
   products: [],
   error: "",
+  keyword:''
+  
 };
 
 const getAllProductsSlice = createSlice({
   name: "products",
   initialState,
+  reducers:{
+  addKeyword:(state,action)=>{
+    state.keyword = action.payload
+  }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchProudcts.pending, (state) => {
       state.loading = true;
@@ -27,5 +34,7 @@ const getAllProductsSlice = createSlice({
     });
   },
 });
+
+export const {addKeyword}= getAllProductsSlice.actions
 
 export default getAllProductsSlice.reducer;

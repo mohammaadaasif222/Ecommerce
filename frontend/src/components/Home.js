@@ -2,25 +2,22 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProudcts } from "../actions/productActions";
 import Pagination from "react-js-pagination";
-import Loading from "./Loading";
-import Card from "./Card";
+import Loading from "./layout/Loading";
+import Card from "./product/Card";
 
-const Home = ({match}) => {
+const Home = () => {
   const [activePage, setActivePage] = useState(1);
 
-  const { loading, products, error } = useSelector((state) => state.Products);
-
-  console.log(match);
-  const keyword = ''
+  const { loading, products, error,keyword  } = useSelector((state) => state.Products);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
 
-    dispatch(fetchProudcts(keyword, activePage));
+    dispatch(fetchProudcts(keyword,activePage));
 
 
-  }, [dispatch, activePage]);
+  }, [dispatch,keyword, activePage]);
 
   function handlePageChange(pageNo) {
 

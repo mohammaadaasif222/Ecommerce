@@ -2,21 +2,22 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Form from "react-bootstrap/Form";
-import { BrowserRouter as Router, Routes, Route,useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import React,{useState} from "react";
+
+import { addKeyword } from "../../redux//features/getAllProductsSlice";
+
+import React, { useState } from "react";
 
 function Header() {
   const [keyword, setKeyword] = useState("");
+  const dispatch = useDispatch()
 
+  const {authenticate} = useSelector((state)=> state.User)
+  console.log(authenticate);
   const formHandler = (e) => {
-    const history = useLocation()
-    e.preventDefault();
-    if (keyword.trim()) {
-      history.pushState(`/search/${keyword}`);
-    } else {
-      history.pushState('/')
-    }
+    e.preventDefault()
+    dispatch(addKeyword(keyword))
   };
 
   return (
@@ -33,15 +34,7 @@ function Header() {
             <Nav.Link href="signup">Sign Up</Nav.Link>
             <Nav.Link href="signin">Sign In</Nav.Link>
           </Nav>
-          {/* <Router>
-            <Routes>
-              <Route path="/">
-                <Route
-                 path="/search" render={({ history }) => <Search history={history} />}
-                />
-              </Route>
-            </Routes>
-          </Router> */}
+          {/* <Route render={({ history }) => <Search history={history} />} /> */}
 
           <Form
             className="d-flex "

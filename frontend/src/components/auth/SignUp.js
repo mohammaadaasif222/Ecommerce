@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-// import { signup } from "../../actions/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../../actions/authActions";
 import {
   MDBBtn,
   MDBContainer,
@@ -17,60 +18,56 @@ const SignUp = () => {
     name: "",
     email: "",
     password: "",
-    error: "",
-    message: "",
-    showForm: true,
   });
 
-  const { name, email, password, error, message, showForm } = data;
+  const dispatch = useDispatch();
+
+  const { name, email, password } = data;
+  const { user  } = useSelector((state) => state.User);
+  
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setData({ ...data, loading: true, error: false });
+    setData({ ...data, loading: true });
     const user = { name, email, password };
-    // signup(user).then((data) => {
-    //   if (data.error) {
-    //     setData({ ...data, error: data.error, loading: false });
-    //   } else {
-    //     setData({
-    //       ...data,
-    //       name: "",
-    //       email: "",
-    //       password: "",
-    //       error: "",
-    //       message: data.message,
-    //       showForm: false,
-    //     });
-    //   }
-    // });
+
+    dispatch(registerUser(user));
   };
+
+
+
+
+
   const handleInput = (e) => {
     const newData = { ...data };
     newData[e.target.id] = e.target.value;
     setData(newData);
   };
 
-  const showError = () =>
-    error ? (
+
+
+
+  const showMessage = () =>
+    user.message ? (
       <>
-        <div className="alert alert-danger mt-5">{error}</div>
+        <div className="alert alert-danger mt-5">{user.message}</div>
         <a href="signup">Click here to go back</a>
       </>
     ) : (
       ""
     );
-  const showMessage = () =>
-    message ? <div className="alert alert-info mt-5">{message}</div> : "";
+  
 
   const signupForm = () => {
     return (
       <>
-  
-        <form onSubmit={(e) => handleSubmit(e)} >
+        <form onSubmit={(e) => handleSubmit(e)}>
           <MDBContainer fluid>
             <MDBCard
-              className="text-black m-5"
+              className="text-black"
               style={{ borderRadius: "25px" }}
             >
               <MDBCardBody>
@@ -143,15 +140,19 @@ const SignUp = () => {
     );
   };
 
+  const dashBoard=()=>{
+    return <h1>Welcome to DashBoard  {user.user.name}</h1>
+  }
+
   return (
     <React.Fragment>
       <div className="container-fluid  justify-content-center item-center pb-3 d-flex ">
         <div className="col-md-6 mt-5">
-          {showError()}
+          {user.success && dashBoard()}
           {showMessage()}
         </div>
       </div>
-      {showForm && signupForm()}
+      {!user.success && signupForm()}
     </React.Fragment>
   );
 };
