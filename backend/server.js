@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const connectDataBase = require("./config/database");
 dotenv.config({ path: "backend/config/config.env" });
 
+const cloudinary = require('cloudinary')
+
 
 
 // Handling Uncaught Exception Error
@@ -21,6 +23,12 @@ mongoose.set("strictQuery", true);
 connectDataBase();
 
 
+
+cloudinary.config({
+  cloude_name : process.env.CLOUDINARY_NAME,
+  api_key :process.env.CLOUDINARY_API_KEY,
+  api_secret:process.env.CLOUDINARY_API_SECRET
+})
 
 // Server runnig 
 const server = app.listen(process.env.PORT, () => {

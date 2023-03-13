@@ -1,30 +1,45 @@
 import "./App.css";
-import Header  from './components/layout/Header'
-import Footer  from './components/layout/Footer'
-import Home from "./components/Home";
-import  SignIn from './components/auth/SignIn'
-import  SignUp from './components/auth/SignUp'
-import User from './components/user'
-import Admin from './components/admin'
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Product from "./components/product";
-import { useSelector } from "react-redux";
+import Footer from "./components/footer";
+import Header from "./components/Header";
+import CartScreen from "./screens/CartScreen";
+import HomeScreen from "./screens/HomeScreen";
+import ProductDetails from "./screens/ProductDetails";
+import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
+import ProfileScreen from "./screens/ProfileScreen";
+import ShippingScreen from "./screens/ShippingScreen";
+import PaymentScreen from "./screens/PaymentScreen";
+import PlaceOrderScreen from "./screens/PlaceOrderScreen";
+import OrderScreen from "./screens/OrderScreen";
+
+import { Container } from "react-bootstrap";
+import { BrowserRouter as Router ,Route,Routes} from "react-router-dom";
+
+import React from "react";
+
 function App() {
-  const { user } = useSelector((state) => state.User);
-  return <div className="App">
-    <Header/>
+  return (
     <Router>
-      <Routes>
-        <Route path="/">
-          <Route index element={<Home/>} />
-           <Route path="product/:productID" element={<Product />} />
-          <Route path="signup" element={<SignUp />} />
-          <Route path="signin" element={<SignIn />} /> 
-        </Route>
-      </Routes>
+      <Header />
+      <main className="my-3">
+        <Container>
+            <Route path="/order/:id" component={OrderScreen} />
+            <Route path="/login" component={LoginScreen} />
+            <Route path="/payment" component={PaymentScreen} />
+            <Route path="/placeorder" component={PlaceOrderScreen} />
+            <Route path="/shipping" component={ShippingScreen} />
+            <Route path="/profile" component={ProfileScreen} />
+            <Route path="/register" component={RegisterScreen} />
+            <Route path="/cart/:id?" component={CartScreen} />
+            <Route path="/product/:id" component={ProductDetails} />
+            <Route path="/" component={HomeScreen} exact />
+
+        </Container>
+      </main>
+
+      <Footer />
     </Router>
-    <Footer/>
-  </div>;
+  );
 }
 
 export default App;

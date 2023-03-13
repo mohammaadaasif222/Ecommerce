@@ -1,14 +1,46 @@
-import axios from "axios"
-import { createAsyncThunk } from "@reduxjs/toolkit"
+import axios from "axios";
+import {
+  PRODUCT_LIST_REQUEST,
+  PRODUCT_LIST_SUCCESS,
+  PRODUCT_LIST_FAILS,
+  PRODUCT_DETAILS_REQUEST,
+  PRODUCT_DETAILS_SUCCESS,
+  PRODUCT_DETAILS_FAILS,
+} from "../constants/productConstant";
 
-// Getting all products 
-export const fetchProudcts = createAsyncThunk('products/fetchProducts',async (keyword , activePage=2)=>{
-    const response = await axios.get(`http://localhost:5000/products?keyword=${keyword}&page=${activePage}`)
-    return response.data
-})
+export const listProducts = () => async (dispatch) => {
+  try {
+    dispatch({ type: PRODUCT_LIST_REQUEST });
+    const response = await axios.get("http://localhost:5000/products");
+    dispatch({
+      type: PRODUCT_LIST_SUCCESS,
+      payload:response.data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_LIST_FAILS,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 
-
-// Getting single product
-export const fetchProductDetails = createAsyncThunk('product/fetchProductDetails ',(id)=>{
-    return axios.get(`http://localhost:5000/product/${id}`).then((response)=>response.data)
-})
+export const listProductDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: PRODUCT_DETAILS_REQUEST });
+    const response = await axios.get(`http://localhost:5000/product/${id}`);
+    
+    dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: response.data.product});
+    
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_DETAILS_FAILS,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

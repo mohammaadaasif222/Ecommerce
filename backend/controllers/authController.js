@@ -2,35 +2,35 @@ const User = require("../models/userModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/cathAsyncErrorsMiddleware");
 const sendToken = require("../utils/jwtToken");
+const formidable = require('formidable');
+const cloudinary = require('cloudinary').v2
 
 //  Register new user
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const { name, email, password } = req.body;
 
-  const checkUser = await User.findOne({ email });
-  if (!email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: "Please Enter Email & Password!",
-    });
-  }
-  if (checkUser) {
-    return res.status(401).json({
-      success: false,
-      message: "Email already used !",
-    });
-  } else {
+  const { name, email, password } = req.body;
+ 
+  try {
     const user = await User.create({
       name,
       email,
       password,
       avatar: {
-        public_id: "1197309358",
-        url: "https://res.cloudinary.com/www-draggital-com/image/upload/v1637315871/high-fashion-model-metallic-silver-260nw-1197309358_pkrj9h.webp",
+        public_id: "xvhsgxm27fo2d3j",
+        url:"https://res.cloudinary.com/sabah-siddiqui/image/upload/v1590587241/xvhsgxm27fo2d3j.jpg",
       },
     });
     sendToken(user, 201, res);
+    
+  } catch (error) {
+     res.status(401).json({
+      success:false,
+      error
+     })
   }
+ 
+
+
 });
 
 // login user
@@ -40,27 +40,30 @@ exports.loginUser = catchAsyncErrors(async (request, response, next) => {
 
   if (!email || !password) {
     return response.status(400).json({
-      success: false,
-      message: "Please Enter Email & Password!",
-    });
+      success:false,
+      message:'Please enter Email & Password !'
+    })
+    //  next(new ErrorHandler('Please enter Email & Password !', 400))
   }
 
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
     return response.status(401).json({
-      success: false,
-      message: "Invalid Email & Password!",
-    });
+      success:false,
+      message:'Invalid Email & Password !'
+    })
+    // next(new ErrorHandler('Invalid Email & Password !', 401))
   }
 
   const isPasswordMacted = await user.comparePassword(password);
 
   if (!isPasswordMacted) {
-    return response.status(401).json({
-      success: false,
-      message: "Invalid Email & Password!",
-    });
+    return  response.status(401).json({
+      success:false,
+      message:'Invalid Email & Password !'
+    })
+    //  next(new ErrorHandler('Invalid Email & Password !', 401))
   }
 
   sendToken(user, 201, response);
