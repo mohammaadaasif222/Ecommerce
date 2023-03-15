@@ -18,8 +18,8 @@ const ProductScreen = ({ product }) => {
           </Link>
           <Card.Text as="div">
             <Rating
-              value={product.rating}
-              text={`${product.numReviews} reviews`}
+              value={product.ratings}
+              text={`${product.numOfReviews} reviews`}
             />
           </Card.Text>
           <Card.Text as="div">$ {product.price}</Card.Text>
