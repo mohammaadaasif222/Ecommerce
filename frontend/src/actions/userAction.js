@@ -57,7 +57,7 @@ export const register = (name, email, password) => async (dispatch) => {
       "http://localhost:5000/register",
       { name, email, password },
       config
-    ); 
+    );
     dispatch({
       type: USER_REGISTER_SUCCESS,
       payload: data,
@@ -92,8 +92,10 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    const { data } = await axios.get(`/api/users/${id}`, config);
-
+    const { data } = await axios.get(
+      `http://localhost:5000/profile/${id}`,
+      config
+    );
     dispatch({
       type: USER_DETAILS_SUCCESS,
       payload: data,
@@ -123,7 +125,11 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    const { data } = await axios.put("api/users/profile", user, config);
+    const { data } = await axios.put(
+      `http://localhost:5000/profile`,
+      user,
+      config
+    );
     dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data });
   } catch (error) {
     dispatch({

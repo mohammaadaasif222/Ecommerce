@@ -33,7 +33,7 @@ const ProfileScreen = ({ location, history }) => {
       history.push("/login");
     } else {
       if (!user.name) {
-        dispatch(getUserDetails("profile"));
+        dispatch(getUserDetails('profile'));
         dispatch(listMyOrders());
       } else {
         setName(user.name);
@@ -86,7 +86,7 @@ const ProfileScreen = ({ location, history }) => {
               ></Form.Control>
             </Form.Group>
             <Form.Group controlId="confirmPassword">
-              <Form.Label>COnfirm Password</Form.Label>
+              <Form.Label>Confirm Password</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Re-enter password"

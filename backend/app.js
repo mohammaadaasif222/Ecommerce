@@ -1,6 +1,7 @@
 const experss = require("express");
 const products = require("./routes/productRoutes");
 const auth = require("./routes/authRoutes");
+const order = require('./routes/orderRoute')
 const cors = require("cors");
 const bodyParser = require('body-parser')
 const filUpload = require('express-fileupload')
@@ -27,6 +28,7 @@ app.use(cors("origin", "*"));
 // Routes
 app.use("/", products);
 app.use("/", auth);
+app.use("/", order);
 
 
 

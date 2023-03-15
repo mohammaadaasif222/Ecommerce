@@ -2,9 +2,7 @@ const User = require("../models/userModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/cathAsyncErrorsMiddleware");
 const sendToken = require("../utils/jwtToken");
-const formidable = require('formidable');
-const cloudinary = require('cloudinary').v2
-
+const asyncHandler = require("express-async-handler");
 //  Register new user
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 
@@ -80,4 +78,46 @@ exports.logoutUser = catchAsyncErrors(async (request, response, next) => {
     success: true,
     message: "Logout successfully !",
   });
+});
+
+exports.getUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    });  
+  } else {
+    res.status(404);
+    throw new Error("User Not Found");
+  }
+});
+
+exports.updateUserProfile = asyncHandler(async (req, res) => {
+  res.json({
+    success:true,
+    user:req.body.user
+  })
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+    const updateUser = await user.save();
+    res.json({
+      _id: updateUser._id,
+      name: updateUser.name,
+      email: updateUser.email,
+      role: updateUser.role,
+      token: generateToken(updateUser._id),
+    });
+  } else {
+    res.status(404);
+    throw new Error("user Not Found!");
+  }
 });
