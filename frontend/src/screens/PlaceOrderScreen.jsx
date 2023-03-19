@@ -11,7 +11,7 @@ const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch();
   const orderCreate = useSelector((state) => state.orderCreate);
   const { order, success, error } = orderCreate;
-
+ console.log(cart.shippingAddress);
   //fun for decimal
   const addDecimal = (num) => {
     return (Math.round(num * 100) / 100).toFixed(2);

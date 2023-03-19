@@ -9,7 +9,7 @@ import { getUserDetails, updateUserProfile } from "../actions/userAction";
 import { listMyOrders } from "../actions/orderAction";
 import { ORDER_CREATE_REQUEST } from "../constants/orderConstant";
 
-const ProfileScreen = ({ location, history }) => {
+const AdminScreen = ({ location, history }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -159,4 +159,4 @@ const ProfileScreen = ({ location, history }) => {
   );
 };
 
-export default ProfileScreen;
+export default AdminScreen;

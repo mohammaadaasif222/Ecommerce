@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Order = require("../models/OrderModel");
 
 const addOrderItem = asyncHandler(async (req, res) => {
+ 
   const {
     orderItems,
     shippingAddress,
@@ -16,19 +17,24 @@ const addOrderItem = asyncHandler(async (req, res) => {
    throw new Error("No Order Found");
   
   } else {
-    const order = new Order({
-      orderItems,
-      user: req.user._id,
-      shippingAddress,
-      paymentMethod,
-      itemsPrice,
-      taxPrice,
-      shippingPrice,
-      totalPrice,
-    });
 
-    const createOrder = await order.save();
-    res.status(201).json(createOrder);
+    try {
+      const order = await Order.create({
+        orderItems,
+        user: req.user._id,
+        shippingAddress,
+        paymentMethod,
+        itemsPrice,
+        taxPrice,
+        shippingPrice,
+        totalPrice,
+      });
+      console.log(order);
+      res.status(201).json(order);
+    } catch (error) {
+      console.log(error);
+    }
+  
   }
 });
 

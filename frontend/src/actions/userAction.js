@@ -29,7 +29,7 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({ type: USER_LOGIN_REQUEST });
     const config = { headers: { "Contnet-Type": "application/json" } };
     const { data } = await axios.post(
-      "http://localhost:5000/login",
+      "http://localhost:5000/users/login",
       { email, password },
       config
     );
@@ -54,7 +54,7 @@ export const register = (name, email, password) => async (dispatch) => {
     dispatch({ type: USER_REGISTER_REQUEST });
     const config = { headers: { "Contnet-Type": "application/json" } };
     const { data } = await axios.post(
-      "http://localhost:5000/register",
+      "http://localhost:5000/users",
       { name, email, password },
       config
     );
@@ -93,9 +93,10 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.get(
-      `http://localhost:5000/profile/${id}`,
+      `http://localhost:5000/users/${id}`,
       config
     );
+   
     dispatch({
       type: USER_DETAILS_SUCCESS,
       payload: data,
@@ -126,7 +127,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.put(
-      `http://localhost:5000/profile`,
+      `http://localhost:5000/users/profile`,
       user,
       config
     );

@@ -1,10 +1,12 @@
 const experss = require("express");
-const products = require("./routes/productRoutes");
-const auth = require("./routes/authRoutes");
-const order = require('./routes/orderRoute')
+const productsRoutes = require("./routes/productRoutes");
+const usersRoutes = require("./routes/authRoutes");
+const orderRoutes = require('./routes/orderRoute')
 const cors = require("cors");
+const dotenv = require("dotenv");
 const bodyParser = require('body-parser')
 const filUpload = require('express-fileupload')
+dotenv.config({ path: "backend/config/config.env" });
 
 const cookieParser = require("cookie-parser");
 
@@ -26,9 +28,12 @@ app.use(cors("origin", "*"));
 
 
 // Routes
-app.use("/", products);
-app.use("/", auth);
-app.use("/", order);
+app.use("/", productsRoutes);
+app.use("/users", usersRoutes);;
+app.use("/orders", orderRoutes);
+app.get('/config/paypal',(req, res)=>{
+    res.send(process.env.PAYPAL_CLIENT_ID)
+})
 
 
 

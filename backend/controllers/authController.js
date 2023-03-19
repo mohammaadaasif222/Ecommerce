@@ -96,11 +96,9 @@ exports.getUserProfile = asyncHandler(async (req, res) => {
 });
 
 exports.updateUserProfile = asyncHandler(async (req, res) => {
-  res.json({
-    success:true,
-    user:req.body.user
-  })
+  
   const user = await User.findById(req.user._id);
+
 
   if (user) {
     user.name = req.body.name || user.name;
@@ -109,13 +107,9 @@ exports.updateUserProfile = asyncHandler(async (req, res) => {
       user.password = req.body.password;
     }
     const updateUser = await user.save();
-    res.json({
-      _id: updateUser._id,
-      name: updateUser.name,
-      email: updateUser.email,
-      role: updateUser.role,
-      token: generateToken(updateUser._id),
-    });
+    
+    sendToken(updateUser,201, res);
+   
   } else {
     res.status(404);
     throw new Error("user Not Found!");

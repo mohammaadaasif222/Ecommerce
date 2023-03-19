@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("./cathAsyncErrorsMiddleware");
 const asyncHandler = require("express-async-handler");
+const dotenv = require("dotenv");
+dotenv.config({ path: "backend/config/config.env" });
 
 exports.isAuthenticatedUser = catchAsyncErrors(
   async (request, response, next) => {
@@ -32,6 +34,7 @@ exports.authorizeRoles = function (...roles) {
   };
 };
 exports.protect = asyncHandler(async (req, res, next) => {
+  
   let token;
   if (
     req.headers.authorization &&
@@ -51,4 +54,5 @@ exports.protect = asyncHandler(async (req, res, next) => {
     res.status(401);
     throw new Error("Not Authorized, not token");
   }
+
 });
