@@ -1,21 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Pagination from "react-js-pagination";
 import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../actions/productActions";
 import { Row, Col } from "react-bootstrap";
 import ProductScreen from "./ProductScreen";
 import Loader from "../components/shared/Loader";
 import Message from "../components/shared/Message";
-const HomeScreen = () => {
+const HomeScreen = ({ match }) => {
+  const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
 
-  const { products, loading, error } = useSelector(
+  const { products, loading, error, resPerPage, productCount } = useSelector(
     (state) => state.productList
   );
+  console.log(resPerPage);
+  console.log(productCount);
+  const keyword = match.params.keyword;
 
   useEffect(() => {
-    dispatch(listProducts());
-  }, [dispatch]);
+    dispatch(listProducts(keyword,currentPage));
+  }, [dispatch, keyword,currentPage]);
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber)
+  }
+  ;
   return (
     <>
       {loading ? (
@@ -31,6 +40,21 @@ const HomeScreen = () => {
           ))}
         </Row>
       )}
+      <div className="d-flex justify-content-center mt-5">
+        <Pagination
+          activePage={currentPage}
+          itemsCountPerPage={resPerPage}
+          totalItemsCount={productCount}
+          pageRangeDisplayed={5}
+          onChange={handlePageChange}
+          nextPageText="Next"
+          prevPageText="Prev"
+          lastPageText="Last"
+          firstPageText="First"
+          itemClass="page-item"
+          linkClass="page-link"
+        />
+      </div>
     </>
   );
 };

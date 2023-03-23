@@ -49,13 +49,13 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
-export const register = (name, email, password) => async (dispatch) => {
+export const register = (formData) => async (dispatch) => {
   try {
     dispatch({ type: USER_REGISTER_REQUEST });
     const config = { headers: { "Contnet-Type": "application/json" } };
     const { data } = await axios.post(
       "http://localhost:5000/users",
-      { name, email, password },
+      formData,
       config
     );
     dispatch({

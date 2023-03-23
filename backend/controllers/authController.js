@@ -3,10 +3,23 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/cathAsyncErrorsMiddleware");
 const sendToken = require("../utils/jwtToken");
 const asyncHandler = require("express-async-handler");
+const cloudinary = require('cloudinary').v2
 //  Register new user
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 
+
+  const result = await cloudinary.uploader.upload(req.body.avatar,{
+    folder:'avatars',
+    width:150,
+    crop:'scale'
+  })
+  
+
+
   const { name, email, password } = req.body;
+  console.log(req.body);
+  // console.log(name);
+  // console.log(email);
  
   try {
     const user = await User.create({
@@ -14,21 +27,17 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
       email,
       password,
       avatar: {
-        public_id: "xvhsgxm27fo2d3j",
-        url:"https://res.cloudinary.com/sabah-siddiqui/image/upload/v1590587241/xvhsgxm27fo2d3j.jpg",
+        public_id: result.public_id,
+        url: result.secure_url,
       },
     });
     sendToken(user, 201, res);
-    
   } catch (error) {
-     res.status(401).json({
-      success:false,
-      error
-     })
+    res.status(401).json({
+      success: false,
+      error,
+    });
   }
- 
-
-
 });
 
 // login user
@@ -38,9 +47,9 @@ exports.loginUser = catchAsyncErrors(async (request, response, next) => {
 
   if (!email || !password) {
     return response.status(400).json({
-      success:false,
-      message:'Please enter Email & Password !'
-    })
+      success: false,
+      message: "Please enter Email & Password !",
+    });
     //  next(new ErrorHandler('Please enter Email & Password !', 400))
   }
 
@@ -48,19 +57,19 @@ exports.loginUser = catchAsyncErrors(async (request, response, next) => {
 
   if (!user) {
     return response.status(401).json({
-      success:false,
-      message:'Invalid Email & Password !'
-    })
+      success: false,
+      message: "Invalid Email & Password !",
+    });
     // next(new ErrorHandler('Invalid Email & Password !', 401))
   }
 
   const isPasswordMacted = await user.comparePassword(password);
 
   if (!isPasswordMacted) {
-    return  response.status(401).json({
-      success:false,
-      message:'Invalid Email & Password !'
-    })
+    return response.status(401).json({
+      success: false,
+      message: "Invalid Email & Password !",
+    });
     //  next(new ErrorHandler('Invalid Email & Password !', 401))
   }
 
@@ -88,7 +97,7 @@ exports.getUserProfile = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
-    });  
+    });
   } else {
     res.status(404);
     throw new Error("User Not Found");
@@ -96,9 +105,7 @@ exports.getUserProfile = asyncHandler(async (req, res) => {
 });
 
 exports.updateUserProfile = asyncHandler(async (req, res) => {
-  
   const user = await User.findById(req.user._id);
-
 
   if (user) {
     user.name = req.body.name || user.name;
@@ -107,9 +114,8 @@ exports.updateUserProfile = asyncHandler(async (req, res) => {
       user.password = req.body.password;
     }
     const updateUser = await user.save();
-    
-    sendToken(updateUser,201, res);
-   
+
+    sendToken(updateUser, 201, res);
   } else {
     res.status(404);
     throw new Error("user Not Found!");
