@@ -6,35 +6,38 @@ const APIFeatures = require("../utils/APIFeatures");
 const cloudinary = require("cloudinary").v2;
 // Create new product
 exports.newProduct = catchAsyncErrors(async (request, response) => {
-  console.log(request.body);
-  const result = await cloudinary.uploader.upload(request.body.images, {
-    folder: "products",
-    width: 150,
-    crop: "scale",
-  });
-  const { name, price, description, category, seller, stock } = request.body;
-  const data = {
-    name,
-    price,
-    description,
-    category,
-    seller,
-    stock,
-    images: [
-      {
-        public_id: result.public_id,
-        url: result.secure_url,
-      },
-    ],
-  };
-  console.log(data);
+  let images = [];
+  if (request.body.images === "string") {
+    images.push(request.body.images);
+  } else {
+    images = request.body.images;
+  }
+
+  let imagesLinks = [];
+  for (let i = 0; i < images.length; i++) {
+    const result = await cloudinary.uploader.upload(images[i], {
+      folder: "products",
+    });
+
+    imagesLinks.push({
+      public_id: result.public_id,
+      url: result.secure_url,
+    });
+  }
+
+  request.body.images = imagesLinks;
 
   request.body.user = request.user.id;
-  const product = await Product.create(data);
+  console.log(request.body);
+
+  const product = await Product.create(request.body);
+
   response.status(201).json({
     success: true,
     product,
   });
+
+ 
 });
 
 // get all prodcuts

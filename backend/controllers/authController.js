@@ -14,13 +14,8 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     crop:'scale'
   })
   
-
-
   const { name, email, password } = req.body;
-  console.log(req.body);
-  // console.log(name);
-  // console.log(email);
- 
+  
   try {
     const user = await User.create({
       name,
@@ -35,7 +30,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   } catch (error) {
     res.status(401).json({
       success: false,
-      error,
+      error
     });
   }
 });

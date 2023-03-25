@@ -57,6 +57,7 @@ const NewProductScreen = ({ location, history }) => {
   };
 
   const changeHandler = (e) => {
+
     const files = Array.from(e.target.files);
 
     setImagesPreview([]);
@@ -71,7 +72,7 @@ const NewProductScreen = ({ location, history }) => {
           setImages((oldArray) => [...oldArray, reader.result]);
         }
       };
-      reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(file);
     });
   };
 
@@ -86,7 +87,7 @@ const NewProductScreen = ({ location, history }) => {
           <h1 className="mb-4">New Product</h1>
 
           <div className="form-group">
-            <label for="name_field">Name</label>
+            <label htmlFor="name_field">Name</label>
             <input
               type="text"
               id="name_field"
@@ -97,7 +98,7 @@ const NewProductScreen = ({ location, history }) => {
           </div>
 
           <div className="form-group">
-            <label for="price_field">Price</label>
+            <label htmlFor="price_field">Price</label>
             <input
               type="text"
               id="price_field"
@@ -108,7 +109,7 @@ const NewProductScreen = ({ location, history }) => {
           </div>
 
           <div className="form-group">
-            <label for="description_field">Description</label>
+            <label htmlFor="description_field">Description</label>
             <textarea
               className="form-control"
               id="description_field"
@@ -119,7 +120,7 @@ const NewProductScreen = ({ location, history }) => {
           </div>
 
           <div className="form-group">
-            <label for="category_field">Category</label>
+            <label htmlFor="category_field">Category</label>
             <select className="form-control" id="category_field" value={category} onChange={(e)=>setCategory(e.target.value)}>
               {categories.map((item, index)=>{
                 return <option key={index} value={item}>{item}</option>
@@ -127,7 +128,7 @@ const NewProductScreen = ({ location, history }) => {
             </select>
           </div>
           <div className="form-group">
-            <label for="stock_field">Stock</label>
+            <label htmlFor="stock_field">Stock</label>
             <input
               type="number"
               id="stock_field"
@@ -138,7 +139,7 @@ const NewProductScreen = ({ location, history }) => {
           </div>
 
           <div className="form-group">
-            <label for="seller_field">Seller Name</label>
+            <label htmlFor="seller_field">Seller Name</label>
             <input
               type="text"
               id="seller_field"
@@ -161,7 +162,7 @@ const NewProductScreen = ({ location, history }) => {
                 onChange={(e)=>changeHandler(e)}
                 multiple
               />
-              <label className="custom-file-label" for="customFile">
+              <label className="custom-file-label" htmlFor="customFile">
                 Choose Images
               </label>
               {imagesPreview.map((image, index)=>{

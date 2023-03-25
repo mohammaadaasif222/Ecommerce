@@ -15,7 +15,7 @@ import {
 } from "../constants/productConstant";
 
 export const newProduct = (productData) => async (dispatch) => {
-   console.log(productData);
+  console.log(productData);
   try {
     dispatch({ type: PRODUCT_CREATE_REQUEST });
     const config = {
@@ -33,10 +33,8 @@ export const newProduct = (productData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_CREATE_FAILS,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: error.response && error.response.data.message
+         
     });
   }
 };
