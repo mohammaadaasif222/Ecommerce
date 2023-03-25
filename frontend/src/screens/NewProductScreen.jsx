@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/shared/Message";
 import Loader from "../components/shared/Loader";
 import { newProduct } from "../actions/productActions";
 import FormContainer from "../components/shared/FromContainer";
 
-const NewProductScreen = ({ location, history }) => {
+const NewProductScreen = ({ history }) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -51,13 +50,10 @@ const NewProductScreen = ({ location, history }) => {
     images.forEach((image) => {
       formData.append("images", image);
     });
-
-    console.log(formData);
     dispatch(newProduct(formData));
   };
 
   const changeHandler = (e) => {
-
     const files = Array.from(e.target.files);
 
     setImagesPreview([]);
@@ -77,112 +73,100 @@ const NewProductScreen = ({ location, history }) => {
   };
 
   return (
-    <div className="container container-fluid">
-      <div className="wrapper my-5">
-        <form
-          className="shadow-lg"
-          onSubmit={submitHandler}
-          encType="multipart/form-data"
-        >
-          <h1 className="mb-4">New Product</h1>
-
-          <div className="form-group">
-            <label htmlFor="name_field">Name</label>
-            <input
-              type="text"
-              id="name_field"
-              className="form-control"
-              value={name}
-              onChange={(e)=>setName(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="price_field">Price</label>
-            <input
-              type="text"
-              id="price_field"
-              className="form-control"
-              value={price}
-              onChange={(e)=>setPrice(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="description_field">Description</label>
-            <textarea
-              className="form-control"
-              id="description_field"
-              rows="8"
-              value={description}
-              onChange={(e)=>setDescription(e.target.value)}
-            ></textarea>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="category_field">Category</label>
-            <select className="form-control" id="category_field" value={category} onChange={(e)=>setCategory(e.target.value)}>
-              {categories.map((item, index)=>{
-                return <option key={index} value={item}>{item}</option>
-              })}
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="stock_field">Stock</label>
-            <input
-              type="number"
-              id="stock_field"
-              className="form-control"
-              value={stock}
-              onChange={(e)=>setStock(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="seller_field">Seller Name</label>
-            <input
-              type="text"
-              id="seller_field"
-              className="form-control"
-              value={seller}
-              onChange={(e)=>setSeller(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Images</label>
-
-            <div className="custom-file">
-              <input
-                type="file"
-                name="product_images"
-                className="custom-file-input"
-                id="customFile"
-                accept="images/*"
-                onChange={(e)=>changeHandler(e)}
-                multiple
-              />
-              <label className="custom-file-label" htmlFor="customFile">
-                Choose Images
-              </label>
-              {imagesPreview.map((image, index)=>{
-                return <img src={image} key={index} alt='img_preview' className="mt-3 mr-2 " 
-                width='55' height="55"/>
-              })}
-            </div>
-          </div>
-
-          <button
-            id="login_button"
-            type="submit"
-            className="btn btn-block py-3"
-            disabled={loading ? true : false}
+    <>
+    <FormContainer>
+      <h1>CREATE PRODUCT</h1>
+      {loading && <Loader />}
+      {error && <Message variant="danger">{error}</Message>}
+      <Form onSubmit={submitHandler} encType="multipart/form-data">
+        <Form.Group controlId="name">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="enter Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+        <Form.Group controlId="price">
+          <Form.Label>Price</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="enter price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+        <Form.Group controlId="description">
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            as={"textarea"}
+            rows={`8`}
+            name="text"
+            placeholder="enter description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+        <Form.Group controlId="category">
+          <Form.Label>Category</Form.Label>
+          <select
+            className="form-control"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
           >
-            CREATE
-          </button>
-        </form>
-      </div>
-    </div>
+            {categories.map((item, index) => {
+              return (
+                <option key={index} value={item}>
+                  {item}
+                </option>
+              );
+            })}
+          </select>
+        </Form.Group>
+        <Form.Group controlId="stock">
+          <Form.Label>Stock</Form.Label>
+          <Form.Control
+            type="number"
+            name="stock"
+            placeholder="add stock"
+            value={stock}
+            onChange={(e) => setStock(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+        <Form.Group controlId="seller_name">
+          <Form.Label>Seller Name</Form.Label>
+          <Form.Control
+            type="text"
+            name="seller_name"
+            placeholder="type seller name"
+            value={seller}
+            onChange={(e) => setSeller(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+        <Form.Group controlId="images">
+          <Form.Label>Upload Images</Form.Label>
+          <Form.Control
+            type="file"
+            placeholder="select images.."
+            onChange={(e) => changeHandler(e)}
+            accept="images/*"
+            multiple
+          ></Form.Control>
+        </Form.Group>
+        <Button
+          type="submit"
+          varient="primary"
+          disabled={loading ? true : false}
+        >
+          CREATE PRODUCT
+        </Button>
+      </Form>
+    </FormContainer>
+    {imagesPreview.map((item, index)=>{
+      return <Card.Img key={index} src={item.url} variant="top" />
+    })}
+    </>
   );
 };
 

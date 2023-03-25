@@ -67,6 +67,8 @@ export const register = (formData) => async (dispatch) => {
       payload: data,
     });
     localStorage.setItem("userInfo", JSON.stringify(data));
+   
+
   } catch (error) {
     console.log();
     dispatch({

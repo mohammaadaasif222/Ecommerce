@@ -8,7 +8,10 @@ const ProductScreen = ({ product }) => {
     <>
       <Card className="my-3 p-3 rounded">
         <Link to={`/product/${product._id}`}>
-          <Card.Img src={product.image} variant="top" />
+          {product.images.map((image,index)=>{
+            return <Card.Img key={index} src={image.url} variant="top" />
+          })}
+          
         </Link>
         <Card.Body>
           <Link to={`/product/${product._id}`}>

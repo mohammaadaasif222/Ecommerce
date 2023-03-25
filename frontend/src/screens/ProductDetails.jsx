@@ -16,7 +16,7 @@ const ProductDetails = ({ history, match }) => {
   const [qty, setQty] = useState(1);
   const dispatch = useDispatch();
   const productDetails = useSelector((state) => state.productDetails);
-  const { loading, error, product } = productDetails;
+  const {  product } = productDetails;
 
   useEffect(() => {
     dispatch(listProductDetails(match.params.id));
@@ -27,7 +27,7 @@ const ProductDetails = ({ history, match }) => {
   };
   return (
     <>
-   <Link to="/" className="btn btn-light">
+      <Link to="/" className="btn btn-light">
         <i className="fas fa-arrow-left    "></i>
         &nbsp; GO BACK
       </Link>
@@ -44,7 +44,7 @@ const ProductDetails = ({ history, match }) => {
             <ListGroupItem>
               <Rating
                 value={product.rating}
-                text={`${product.numReviews} Reviews`}
+                text={`${product.numOfReviews} Reviews`}
               />
             </ListGroupItem>
             <ListGroupItem>Price : ${product.price}</ListGroupItem>
@@ -56,11 +56,11 @@ const ProductDetails = ({ history, match }) => {
             <Row>
               <Col>Status :</Col>
               <Col>
-                {product.countInStock > 0 ? "In Stock " : "out of stock"}
+                {product.stock > 0 ? "In Stock " : "out of stock"}
               </Col>
             </Row>
           </ListGroupItem>
-          {product.countInStock > 0 && (
+          {product.stock > 0 && (
             <ListGroupItem>
               <Row>
                 <Col>Qty</Col>
@@ -69,7 +69,7 @@ const ProductDetails = ({ history, match }) => {
                   value={qty}
                   onChange={(e) => setQty(e.target.value)}
                 >
-                  {[...Array(product.countInStock).keys()].map((x) => (
+                  {[...Array(product.stock).keys()].map((x) => (
                     <option key={x + 1} value={x + 1}>
                       {x + 1}
                     </option>

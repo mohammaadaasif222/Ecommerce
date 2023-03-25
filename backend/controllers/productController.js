@@ -27,16 +27,23 @@ exports.newProduct = catchAsyncErrors(async (request, response) => {
 
   request.body.images = imagesLinks;
 
-  request.body.user = request.user.id;
+  // request.body.user = request.user.id;
   console.log(request.body);
 
-  const product = await Product.create(request.body);
-
-  response.status(201).json({
-    success: true,
-    product,
-  });
-
+  try {
+    const product = await Product.create(request.body);
+    console.log(product);
+    response.status(201).json({
+      success: true,
+      product,
+    });
+  } catch (error) {
+    console.log(error);
+    response.status(401).json({
+      success: false,
+      error,
+    });
+  }
  
 });
 

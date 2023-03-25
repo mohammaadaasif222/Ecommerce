@@ -54,18 +54,17 @@ const RegisterScreen = ({ location, history }) => {
   };
 
   const onChangeHandler = (event) => {
-    if(event.target.name === 'avatar'){
-
+    if (event.target.name === "avatar") {
       const reader = new FileReader();
-      reader.onload=()=>{
-        if(reader.readyState === 2){
+      reader.onload = () => {
+        if (reader.readyState === 2) {
           setAvatarPreview(reader.result);
-          setAvatar(reader.result)
+          setAvatar(reader.result);
         }
-      }
+      };
       reader.readAsDataURL(event.target.files[0]);
-    }else{
-      setUser({...user, [event.target.name]:event.target.value});
+    } else {
+      setUser({ ...user, [event.target.name]: event.target.value });
     }
   };
   return (
@@ -83,7 +82,7 @@ const RegisterScreen = ({ location, history }) => {
               name="name"
               placeholder="enter Name"
               value={name}
-              onChange={(e)=>onChangeHandler(e)}
+              onChange={(e) => onChangeHandler(e)}
             ></Form.Control>
           </Form.Group>
           <Form.Group controlId="email">
@@ -93,7 +92,7 @@ const RegisterScreen = ({ location, history }) => {
               name="email"
               placeholder="enter email"
               value={email}
-              onChange={(e)=>onChangeHandler(e)}
+              onChange={(e) => onChangeHandler(e)}
             ></Form.Control>
           </Form.Group>
           <Form.Group controlId="password">
@@ -101,9 +100,10 @@ const RegisterScreen = ({ location, history }) => {
             <Form.Control
               type="password"
               name="password"
+              autoComplete="true"
               placeholder="enter password"
               value={password}
-              onChange={(e)=>onChangeHandler(e)}
+              onChange={(e) => onChangeHandler(e)}
             ></Form.Control>
           </Form.Group>
           <Form.Group controlId="confirmPassword">
@@ -111,6 +111,7 @@ const RegisterScreen = ({ location, history }) => {
             <Form.Control
               type="password"
               placeholder="Re-enter password"
+              autoComplete="true"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             ></Form.Control>
@@ -121,7 +122,7 @@ const RegisterScreen = ({ location, history }) => {
               type="file"
               name="avatar"
               placeholder="choose an image.."
-              onChange={(e)=>onChangeHandler(e)}
+              onChange={(e) => onChangeHandler(e)}
               accept="images/*"
             ></Form.Control>
           </Form.Group>
@@ -142,7 +143,7 @@ const RegisterScreen = ({ location, history }) => {
           </Col>
         </Row>
       </FormContainer>
-      <img src={avatarPreview} width="100" height="150" />
+      <img src={avatarPreview} width="100" height="150" alt={name} />
     </>
   );
 };

@@ -15,7 +15,7 @@ import OrderScreen from "./screens/OrderScreen";
 import NewProductScreen from './screens/NewProductScreen'
 
 import { Container } from "react-bootstrap";
-import { BrowserRouter as Router ,Route,Routes} from "react-router-dom";
+import { BrowserRouter as Router ,Route} from "react-router-dom";
 
 import React from "react";
 

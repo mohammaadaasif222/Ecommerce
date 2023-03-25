@@ -6,6 +6,7 @@ import { Row, Col } from "react-bootstrap";
 import ProductScreen from "./ProductScreen";
 import Loader from "../components/shared/Loader";
 import Message from "../components/shared/Message";
+
 const HomeScreen = ({ match }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
@@ -13,18 +14,16 @@ const HomeScreen = ({ match }) => {
   const { products, loading, error, resPerPage, productCount } = useSelector(
     (state) => state.productList
   );
-  console.log(resPerPage);
-  console.log(productCount);
+
   const keyword = match.params.keyword;
 
   useEffect(() => {
-    dispatch(listProducts(keyword,currentPage));
-  }, [dispatch, keyword,currentPage]);
+    dispatch(listProducts(keyword, currentPage));
+  }, [dispatch, keyword, currentPage]);
 
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber)
-  }
-  ;
+    setCurrentPage(pageNumber);
+  };
   return (
     <>
       {loading ? (
@@ -41,19 +40,23 @@ const HomeScreen = ({ match }) => {
         </Row>
       )}
       <div className="d-flex justify-content-center mt-5">
-        <Pagination
-          activePage={currentPage}
-          itemsCountPerPage={resPerPage}
-          totalItemsCount={productCount}
-          pageRangeDisplayed={5}
-          onChange={handlePageChange}
-          nextPageText="Next"
-          prevPageText="Prev"
-          lastPageText="Last"
-          firstPageText="First"
-          itemClass="page-item"
-          linkClass="page-link"
-        />
+        {productCount ? (
+          <Pagination
+            activePage={currentPage}
+            itemsCountPerPage={resPerPage}
+            totalItemsCount={productCount}
+            pageRangeDisplayed={5}
+            onChange={handlePageChange}
+            nextPageText="Next"
+            prevPageText="Prev"
+            lastPageText="Last"
+            firstPageText="First"
+            itemClass="page-item"
+            linkClass="page-link"
+          />
+        ) : (
+          'Loading..'
+        )}
       </div>
     </>
   );

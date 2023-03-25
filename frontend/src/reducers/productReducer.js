@@ -11,6 +11,9 @@ import {
   PRODUCT_CREATE_REQUEST,
   PRODUCT_CREATE_SUCCESS,
   PRODUCT_CREATE_FAILS,
+  DELETE_PRODUCT_REQUEST,
+  DELETE_PRODUCT_SUCCESS,
+  DELETE_PRODUCT_FAILS,
 } from "../constants/productConstant";
 
 export const newProductReducer = (state = { products: {} }, action) => {
@@ -41,8 +44,8 @@ export const productListReducer = (state = { products: [] }, action) => {
         loading: false,
         products: action.payload.products,
         resPerPage: action.payload.resPerPage,
-        productCount:action.payload.countProduct,
-        size:action.payload.size
+        productCount: action.payload.countProduct,
+        size: action.payload.size,
       };
     case PRODUCT_LIST_FAILS:
     case PRODUCT_ADMIN_FAILS:
@@ -63,6 +66,29 @@ export const productDetailsReducer = (
       return { loading: false, product: action.payload };
     case PRODUCT_DETAILS_FAILS:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const productReaducer = (state = {}, action) => {
+  switch (action.type) {
+    case DELETE_PRODUCT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case DELETE_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isDeleted: action.payload,
+      };
+    case DELETE_PRODUCT_FAILS:
+      return {
+        loading: false,
+        error: action.payload,
+      };
     default:
       return state;
   }

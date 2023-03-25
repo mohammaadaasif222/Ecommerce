@@ -6,10 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/shared/Message";
 import Loader from "../components/shared/Loader";
 import { getUserDetails, updateUserProfile } from "../actions/userAction";
-import { adminProducts } from "../actions/productActions";
-import { ORDER_CREATE_REQUEST } from "../constants/orderConstant";
+import { adminProducts, deleteProduct } from "../actions/productActions";
 
-const AdminScreen = ({ location, history }) => {
+const AdminScreen = ({ history }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +29,7 @@ const AdminScreen = ({ location, history }) => {
     error: adminError,
   } = useSelector((state) => state.productList);
 
-  console.log(products);
+
 
   useEffect(() => {
     if (!userInfo) {
@@ -51,7 +50,9 @@ const AdminScreen = ({ location, history }) => {
     //dispatch
     dispatch(updateUserProfile({ id: user._id, name, email, password }));
   };
-
+ const deleteProductHandler=(id)=>{
+  dispatch(deleteProduct(id))
+ }
   return (
     <>
       {user.role ? (
@@ -103,7 +104,7 @@ const AdminScreen = ({ location, history }) => {
                 Update
               </Button>
             </Form>
-            <Link to='/newproduct'>Create Product</Link>
+            <Link className="btn btn-success" to='/newproduct'>Create Product</Link>
           </Col>
           <Col md={9}>
             <h1>All Orders</h1>
@@ -137,7 +138,7 @@ const AdminScreen = ({ location, history }) => {
                         </LinkContainer>
                       </td>
                       <td>
-                        <Button variant="danger">DELETE</Button>
+                        <Button variant="danger" onClick={(e)=>deleteProductHandler(product._id)}>DELETE</Button>
                       </td>
                       <td>
                         <Button variant="warning">EDIT</Button>
